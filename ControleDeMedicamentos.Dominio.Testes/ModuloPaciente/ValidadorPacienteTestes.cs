@@ -7,17 +7,25 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloPaciente
     [TestClass]
     public class ValidadorPacienteTestes
     {
+        private readonly Paciente paciente;
+        private readonly ValidadorPaciente validador;
+
+        public ValidadorPacienteTestes()
+        {
+            paciente = new()
+            {
+                Nome = "Alan",
+                CartaoSUS = "123456789123456"
+            };
+
+            validador = new();
+        }
+
         [TestMethod]
         public void Nome_Deve_Ser_Obrigatorio()
         {
             // arrange
-            Paciente paciente = new()
-            {
-                Nome = null,
-                CartaoSUS = "165165464"
-            };
-
-            ValidadorPaciente validador = new();
+            paciente.Nome = null;
 
             // action
             ValidationResult resultado = validador.Validate(paciente);
@@ -30,13 +38,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloPaciente
         public void Nome_Deve_Ser_Valido()
         {
             // arrange
-            Paciente paciente = new()
-            {
-                Nome = "Alan@-0g--gkdglsdgpo2",
-                CartaoSUS = "165165464"
-            };
-
-            ValidadorPaciente validador = new();
+            paciente.Nome = "Alan@-0g--gkdglsdgpo2";
 
             // action
             ValidationResult resultado = validador.Validate(paciente);
@@ -49,13 +51,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloPaciente
         public void CartaoSUS_Deve_Ser_Obrigatorio()
         {
             // arrange
-            Paciente paciente = new()
-            {
-                Nome = "Alan",
-                CartaoSUS = null
-            };
-
-            ValidadorPaciente validador = new();
+            paciente.CartaoSUS = null;
 
             // action
             ValidationResult resultado = validador.Validate(paciente);
@@ -68,13 +64,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloPaciente
         public void CartaoSUS_Deve_Ser_Valido()
         {
             // arrange
-            Paciente paciente = new()
-            {
-                Nome = "Alan",
-                CartaoSUS = "1674859GFGF687451450"
-            };
-
-            ValidadorPaciente validador = new();
+            paciente.CartaoSUS = "1674859GFGF687451450";
 
             // action
             ValidationResult resultado = validador.Validate(paciente);
