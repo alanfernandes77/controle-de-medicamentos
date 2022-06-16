@@ -7,20 +7,28 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
     [TestClass]
     public class ValidadorFornecedorTestes
     {
-        [TestMethod]
-        public void Nome_Deve_Ser_Obrigatorio()
+        private readonly Fornecedor fornecedor;
+        private readonly ValidadorFornecedor validador;
+
+        public ValidadorFornecedorTestes()
         {
-            // arrange
-            Fornecedor fornecedor = new()
+            fornecedor = new()
             {
-                Nome = null,
+                Nome = "Alan",
                 Telefone = "49998165491",
                 Email = "alan@email.com",
                 Cidade = "Lages",
                 UF = "SC"
             };
 
-            ValidadorFornecedor validador = new();
+            validador = new();
+        }
+
+        [TestMethod]
+        public void Nome_Deve_Ser_Obrigatorio()
+        {
+            // arrange
+            fornecedor.Nome = null;
 
             // action
             ValidationResult resultado = validador.Validate(fornecedor);
@@ -33,16 +41,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
         public void Nome_Deve_Ser_Valido()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan_Fernandes!?",
-                Telefone = "49998165491",
-                Email = "alan@email.com",
-                Cidade = "Lages",
-                UF = "SC"
-            };
-
-            ValidadorFornecedor validador = new();
+            fornecedor.Nome = "Alan_Fernandes!?";
 
             // action
             ValidationResult resultado = validador.Validate(fornecedor);
@@ -55,16 +54,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
         public void Telefone_Deve_Ser_Obrigatorio()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = null,
-                Email = "alan@email.com",
-                Cidade = "Lages",
-                UF = "SC"
-            };
-
-            ValidadorFornecedor validador = new();
+            fornecedor.Telefone = null;
 
             // action
             ValidationResult resultado = validador.Validate(fornecedor);
@@ -77,16 +67,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
         public void Telefone_Deve_Ser_Valido()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = "qwertyuiopa",
-                Email = "alan@email.com",
-                Cidade = "Lages",
-                UF = "SC"
-            };
-
-            ValidadorFornecedor validador = new();
+            fornecedor.Telefone = "qwertyuiopa";
 
             // action
             ValidationResult resultado = validador.Validate(fornecedor);
@@ -99,16 +80,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
         public void Email_Deve_Ser_Obrigatorio()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = "49998165491",
-                Email = null,
-                Cidade = "Lages",
-                UF = "SC"
-            };
-
-            ValidadorFornecedor validador = new();
+            fornecedor.Email = null;
 
             // action
             ValidationResult resultado = validador.Validate(fornecedor);
@@ -121,16 +93,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
         public void Email_Deve_Ser_Valido()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = "49998165491",
-                Email = "alanemail.com",
-                Cidade = "Lages",
-                UF = "SC"
-            };
-
-            ValidadorFornecedor validador = new();
+            fornecedor.Email = "alanemail.com";
 
             // action
             ValidationResult resultado = validador.Validate(fornecedor);
@@ -143,16 +106,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
         public void Cidade_Deve_Ser_Obrigatorio()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = "49998165491",
-                Email = "alan@email.com",
-                Cidade = null,
-                UF = "SC"
-            };
-
-            ValidadorFornecedor validador = new();
+            fornecedor.Cidade = null;
 
             // action
             ValidationResult resultado = validador.Validate(fornecedor);
@@ -165,16 +119,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
         public void Cidade_Deve_Ser_Valida()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = "49998165491",
-                Email = "alan@email.com",
-                Cidade = "_Lag?es",
-                UF = "SC"
-            };
-
-            ValidadorFornecedor validador = new();
+            fornecedor.Cidade = "_Lag?es";
 
             // action
             ValidationResult resultado = validador.Validate(fornecedor);
@@ -187,16 +132,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
         public void UF_Deve_Ser_Obrigatorio()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = "49998165491",
-                Email = "alan@email.com",
-                Cidade = "Lages",
-                UF = null
-            };
-
-            ValidadorFornecedor validador = new();
+            fornecedor.UF = null;
 
             // action
             ValidationResult resultado = validador.Validate(fornecedor);
@@ -209,16 +145,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
         public void UF_Deve_Ser_Valida()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = "49998165491",
-                Email = "alan@email.com",
-                Cidade = "Lages",
-                UF = "XX"
-            };
-
-            ValidadorFornecedor validador = new();
+            fornecedor.UF = "XX";
 
             // action
             ValidationResult resultado = validador.Validate(fornecedor);
