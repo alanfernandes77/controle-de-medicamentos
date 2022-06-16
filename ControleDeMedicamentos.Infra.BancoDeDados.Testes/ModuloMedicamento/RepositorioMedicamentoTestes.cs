@@ -1,4 +1,5 @@
-﻿using ControleDeMedicamentos.Dominio.ModuloMedicamento;
+﻿using ControleDeMedicamentos.Dominio.ModuloFornecedor;
+using ControleDeMedicamentos.Dominio.ModuloMedicamento;
 using ControleDeMedicamentos.Infra.BancoDeDados.Compartilhado;
 using ControleDeMedicamentos.Infra.BancoDeDados.ModuloFornecedor;
 using ControleDeMedicamentos.Infra.BancoDeDados.ModuloMedicamento;
@@ -10,8 +11,11 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloMedicamento
     [TestClass]
     public class RepositorioMedicamentoTestes : ConexaoSql
     {
-        private readonly RepositorioMedicamento repositorioMedicamento;
+        private readonly Fornecedor fornecedor;
+        private readonly Medicamento medicamento;
+
         private readonly RepositorioFornecedor repositorioFornecedor;
+        private readonly RepositorioMedicamento repositorioMedicamento;
 
         public RepositorioMedicamentoTestes()
         {
@@ -31,32 +35,34 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloMedicamento
                 comando.ExecuteNonQuery();
             }
 
-            repositorioMedicamento = new();
+            fornecedor = new()
+            {
+                Nome = "Alan",
+                Telefone = "49998165491",
+                Email = "alan@email.com",
+                Cidade = "Lages",
+                UF = "SC"
+            };
+
+            medicamento = new()
+            {
+                Nome = "Paracetamol",
+                Descricao = "Analgésico",
+                Lote = "P-001",
+                Validade = new DateTime(2022, 8, 20),
+                QuantidadeDisponivel = 50,
+                Fornecedor = fornecedor
+            };
+
             repositorioFornecedor = new();
+            repositorioMedicamento = new();
         }
 
         [TestMethod]
         public void Deve_Inserir_Medicamento()
         {
             // arrange
-            Medicamento medicamento = new()
-            {
-                Nome = "Paracetamol",
-                Descricao = "Remédio para dor de cabeça",
-                Lote = "P-001",
-                Validade = new DateTime(2022, 8, 20),
-                QuantidadeDisponivel = 50,
-                Fornecedor = new()
-                {
-                    Nome = "Alan",
-                    Telefone = "49998165491",
-                    Email = "alan@email.com",
-                    Cidade = "Lages",
-                    UF = "SC"
-                }
-            };
-
-            repositorioFornecedor.Inserir(medicamento.Fornecedor);
+            repositorioFornecedor.Inserir(fornecedor);
 
             // action
             repositorioMedicamento.Inserir(medicamento);
@@ -72,34 +78,10 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloMedicamento
         public void Deve_Editar_Medicamento()
         {
             // arrange
-            Medicamento medicamento = new()
-            {
-                Nome = "Paracetamol",
-                Descricao = "Remédio para dor de cabeça",
-                Lote = "P-001",
-                Validade = new DateTime(2022, 8, 20),
-                QuantidadeDisponivel = 50,
-                Fornecedor = new()
-                {
-                    Nome = "Alan",
-                    Telefone = "49998165491",
-                    Email = "alan@email.com",
-                    Cidade = "Lages",
-                    UF = "SC"
-                }
-            };
-
-            repositorioFornecedor.Inserir(medicamento.Fornecedor);
+            repositorioFornecedor.Inserir(fornecedor);
             repositorioMedicamento.Inserir(medicamento);
 
-            Medicamento MedicamentoAtualizado = repositorioMedicamento.SelecionarPorId(medicamento.Id);
-
-            MedicamentoAtualizado.Nome = "Nimesulida";
-            MedicamentoAtualizado.Descricao = "Anti-Inflamatório";
-            MedicamentoAtualizado.Lote = "N-001";
-            MedicamentoAtualizado.Validade = new DateTime(2023, 08, 20);
-            MedicamentoAtualizado.QuantidadeDisponivel = 100;
-            MedicamentoAtualizado.Fornecedor = new()
+            Fornecedor fornecedor2 = new()
             {
                 Nome = "James",
                 Telefone = "11984675506",
@@ -108,7 +90,16 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloMedicamento
                 UF = "SP"
             };
 
-            repositorioFornecedor.Inserir(MedicamentoAtualizado.Fornecedor);
+            repositorioFornecedor.Inserir(fornecedor2);
+
+            Medicamento MedicamentoAtualizado = repositorioMedicamento.SelecionarPorId(medicamento.Id);
+
+            MedicamentoAtualizado.Nome = "Nimesulida";
+            MedicamentoAtualizado.Descricao = "Anti-Inflamatório";
+            MedicamentoAtualizado.Lote = "N-001";
+            MedicamentoAtualizado.Validade = new DateTime(2023, 08, 20);
+            MedicamentoAtualizado.QuantidadeDisponivel = 100;
+            MedicamentoAtualizado.Fornecedor = fornecedor2;
 
             // action
             repositorioMedicamento.Editar(MedicamentoAtualizado);
@@ -124,32 +115,15 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloMedicamento
         public void Deve_Excluir_Medicamento()
         {
             // arrange
-            Medicamento medicamento = new()
-            {
-                Nome = "Paracetamol",
-                Descricao = "Remédio para dor de cabeça",
-                Lote = "P-001",
-                Validade = new DateTime(2022, 8, 20),
-                QuantidadeDisponivel = 50,
-                Fornecedor = new()
-                {
-                    Nome = "Alan",
-                    Telefone = "49998165491",
-                    Email = "alan@email.com",
-                    Cidade = "Lages",
-                    UF = "SC"
-                }
-            };
-
-            repositorioFornecedor.Inserir(medicamento.Fornecedor);
+            repositorioFornecedor.Inserir(fornecedor);
             repositorioMedicamento.Inserir(medicamento);
 
             // action
             repositorioMedicamento.Excluir(medicamento);
 
+            // assert
             Medicamento MedicamentoEncontrado = repositorioMedicamento.SelecionarPorId(medicamento.Id);
 
-            // assert
             Assert.IsNull(MedicamentoEncontrado);
         }
 
@@ -157,21 +131,13 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloMedicamento
         public void Deve_Selecionar_Todos_Os_Medicamentos()
         {
             // arrange
-            Medicamento medicamento = new()
+            Fornecedor fornecedor2 = new()
             {
-                Nome = "Paracetamol",
-                Descricao = "Remédio para dor de cabeça",
-                Lote = "P-001",
-                Validade = new DateTime(2022, 8, 20),
-                QuantidadeDisponivel = 50,
-                Fornecedor = new()
-                {
-                    Nome = "Alan",
-                    Telefone = "49998165491",
-                    Email = "alan@email.com",
-                    Cidade = "Lages",
-                    UF = "SC"
-                }
+                Nome = "James",
+                Telefone = "11984675506",
+                Email = "james@email.com",
+                Cidade = "Guarulhos",
+                UF = "SP"
             };
 
             Medicamento medicamento2 = new()
@@ -181,74 +147,30 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloMedicamento
                 Lote = "N-001",
                 Validade = new DateTime(2025, 5, 15),
                 QuantidadeDisponivel = 100,
-                Fornecedor = new()
-                {
-                    Nome = "James",
-                    Telefone = "11984675506",
-                    Email = "james@email.com",
-                    Cidade = "Guarulhos",
-                    UF = "SP"
-                }
+                Fornecedor = fornecedor
             };
 
-            Medicamento medicamento3 = new()
-            {
-                Nome = "Rivotril",
-                Descricao = "Remédio para programador",
-                Lote = "R-001",
-                Validade = new DateTime(2030, 10, 5),
-                QuantidadeDisponivel = 200,
-                Fornecedor = new()
-                {
-                    Nome = "Rafael",
-                    Telefone = "51998451710",
-                    Email = "rafael@email.com",
-                    Cidade = "Gravataí",
-                    UF = "RS"
-                }
-            };
-
-            repositorioFornecedor.Inserir(medicamento.Fornecedor);
-            repositorioFornecedor.Inserir(medicamento2.Fornecedor);
-            repositorioFornecedor.Inserir(medicamento3.Fornecedor);
+            repositorioFornecedor.Inserir(fornecedor);
+            repositorioFornecedor.Inserir(fornecedor2);
 
             repositorioMedicamento.Inserir(medicamento);
             repositorioMedicamento.Inserir(medicamento2);
-            repositorioMedicamento.Inserir(medicamento3);
 
             // action
-            List<Medicamento> medicamentos = repositorioMedicamento.SelecionarTodos();
+            List<Medicamento> medicamentosEncontrados = repositorioMedicamento.SelecionarTodos();
 
             // assert
-            Assert.AreEqual(3, medicamentos.Count);
+            Assert.AreEqual(2, medicamentosEncontrados.Count);
 
-            Assert.AreEqual("Paracetamol", medicamentos[0].Nome);
-            Assert.AreEqual("Nimesulida", medicamentos[1].Nome);
-            Assert.AreEqual("Rivotril", medicamentos[2].Nome);
+            Assert.AreEqual("Paracetamol", medicamentosEncontrados[0].Nome);
+            Assert.AreEqual("Nimesulida", medicamentosEncontrados[1].Nome);
         }
 
         [TestMethod]
         public void Deve_Selecionar_Medicamento_Por_Id()
         {
             // arrange
-            Medicamento medicamento = new()
-            {
-                Nome = "Paracetamol",
-                Descricao = "Remédio para dor de cabeça",
-                Lote = "P-001",
-                Validade = new DateTime(2022, 8, 20),
-                QuantidadeDisponivel = 7,
-                Fornecedor = new()
-                {
-                    Nome = "Alan",
-                    Telefone = "49998165491",
-                    Email = "alan@email.com",
-                    Cidade = "Lages",
-                    UF = "SC"
-                }
-            };
-
-            repositorioFornecedor.Inserir(medicamento.Fornecedor);
+            repositorioFornecedor.Inserir(fornecedor);
             repositorioMedicamento.Inserir(medicamento);
 
             // action
@@ -263,73 +185,18 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloMedicamento
         public void Deve_Selecionar_Medicamentos_Com_Baixo_Estoque()
         {
             // arrange
-            Medicamento medicamento = new()
-            {
-                Nome = "Paracetamol",
-                Descricao = "Remédio para dor de cabeça",
-                Lote = "P-001",
-                Validade = new DateTime(2022, 8, 20),
-                QuantidadeDisponivel = 7,
-                Fornecedor = new()
-                {
-                    Nome = "Alan",
-                    Telefone = "49998165491",
-                    Email = "alan@email.com",
-                    Cidade = "Lages",
-                    UF = "SC"
-                }
-            };
+            medicamento.QuantidadeDisponivel = 4;
 
-            Medicamento medicamento2 = new()
-            {
-                Nome = "Nimesulida",
-                Descricao = "Anti-Inflamatório",
-                Lote = "N-001",
-                Validade = new DateTime(2025, 5, 15),
-                QuantidadeDisponivel = 10,
-                Fornecedor = new()
-                {
-                    Nome = "James",
-                    Telefone = "11984675506",
-                    Email = "james@email.com",
-                    Cidade = "Guarulhos",
-                    UF = "SP"
-                }
-            };
-
-            Medicamento medicamento3 = new()
-            {
-                Nome = "Rivotril",
-                Descricao = "Remédio para programador",
-                Lote = "R-001",
-                Validade = new DateTime(2030, 10, 5),
-                QuantidadeDisponivel = 7,
-                Fornecedor = new()
-                {
-                    Nome = "Rafael",
-                    Telefone = "51998451710",
-                    Email = "rafael@email.com",
-                    Cidade = "Gravataí",
-                    UF = "RS"
-                }
-            };
-
-            repositorioFornecedor.Inserir(medicamento.Fornecedor);
-            repositorioFornecedor.Inserir(medicamento2.Fornecedor);
-            repositorioFornecedor.Inserir(medicamento3.Fornecedor);
-
+            repositorioFornecedor.Inserir(fornecedor);
             repositorioMedicamento.Inserir(medicamento);
-            repositorioMedicamento.Inserir(medicamento2);
-            repositorioMedicamento.Inserir(medicamento3);
 
             // action
-            List<Medicamento> medicamentos = repositorioMedicamento.SelecionarMedicamentosComBaixoEstoque();
+            List<Medicamento> medicamentoEncontrados = repositorioMedicamento.SelecionarMedicamentosComBaixoEstoque();
 
             // assert
-            Assert.AreEqual(2, medicamentos.Count);
+            Assert.AreEqual(1, medicamentoEncontrados.Count);
 
-            Assert.AreEqual("Paracetamol", medicamentos[0].Nome);
-            Assert.AreEqual("Rivotril", medicamentos[1].Nome);
+            Assert.AreEqual("Paracetamol", medicamentoEncontrados[0].Nome);
         }
     }
 }
