@@ -12,13 +12,18 @@ namespace ControleDeMedicamentos.Dominio.ModuloRequisicao
             RuleFor(x => x.Paciente)
                 .NotNull().WithMessage("Campo 'Paciente' é obrigatório.");
 
-            RuleFor(x => x.Medicamento)
-                .NotNull().WithMessage("Campo 'Medicamento' é obrigatório.");
+            When(r => r.Medicamento == null, () =>
+            {
+                RuleFor(x => x.Medicamento)
+                    .NotNull().WithMessage("Campo 'Medicamento' é obrigatório.");
 
-            RuleFor(x => x.QuantidadeMedicamento)
-                .NotEmpty().WithMessage("Campo 'Quantidade Medicamento' é obrigatório.")
-                .GreaterThan(0).WithMessage("Quantidade Medicamento informada é inválida.")
-                .LessThanOrEqualTo(x => x.Medicamento.QuantidadeDisponivel).WithMessage("Quantidade Medicamento não disponível.");
+            }).Otherwise(() =>
+
+            {
+                RuleFor(x => x.QuantidadeMedicamento)
+                    .GreaterThan(0).WithMessage("Quantidade Medicamento informada é inválida.")
+                    .LessThan(x => x.Medicamento.QuantidadeDisponivel).WithMessage("Quantidade Medicamento não disponível.");
+            });
 
             RuleFor(x => x.DataRequisicao)
                 .Equal(DateTime.Now.Date).WithMessage("Erro ao salvar a data da requisição.");
