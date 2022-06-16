@@ -9,6 +9,7 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloFuncionario
     [TestClass]
     public class RepositorioFuncionarioTestes : ConexaoSql
     {
+        private readonly Funcionario funcionario;
         private readonly RepositorioFuncionario repositorioFuncionario;
 
         public RepositorioFuncionarioTestes()
@@ -26,44 +27,36 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloFuncionario
                 comando.ExecuteNonQuery();
             }
 
+            funcionario = new()
+            {
+                Nome = "Alan",
+                Usuario = "username.954",
+                Senha = "459@password!username"
+            };
+
             repositorioFuncionario = new();
         }
 
         [TestMethod]
         public void Deve_Inserir_Funcionario()
         {
-            // arrange
-            Funcionario novoFuncionario = new()
-            {
-                Nome = "Alan",
-                Usuario = "username.954",
-                Senha = "459@password!username"
-            };
-
             // action
-            repositorioFuncionario.Inserir(novoFuncionario);
+            repositorioFuncionario.Inserir(funcionario);
 
             // assert
-            Funcionario funcionarioEncontrado = repositorioFuncionario.SelecionarPorId(novoFuncionario.Id);
+            Funcionario funcionarioEncontrado = repositorioFuncionario.SelecionarPorId(funcionario.Id);
 
             Assert.IsNotNull(funcionarioEncontrado);
-            Assert.AreEqual(novoFuncionario, funcionarioEncontrado);
+            Assert.AreEqual(funcionario, funcionarioEncontrado);
         }
 
         [TestMethod]
         public void Deve_Editar_Funcionario()
         {
             // arrange
-            Funcionario novoFuncionario = new()
-            {
-                Nome = "Alan",
-                Usuario = "username.954",
-                Senha = "459@password!username"
-            };
+            repositorioFuncionario.Inserir(funcionario);
 
-            repositorioFuncionario.Inserir(novoFuncionario);
-
-            Funcionario funcionarioAtualizado = repositorioFuncionario.SelecionarPorId(novoFuncionario.Id);
+            Funcionario funcionarioAtualizado = repositorioFuncionario.SelecionarPorId(funcionario.Id);
 
             funcionarioAtualizado.Nome = "James";
             funcionarioAtualizado.Usuario = "username.135";
@@ -73,34 +66,24 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloFuncionario
             repositorioFuncionario.Editar(funcionarioAtualizado);
 
             // assert 
-            Funcionario funcionarioEncontrado = repositorioFuncionario.SelecionarPorId(novoFuncionario.Id);
+            Funcionario funcionarioEncontrado = repositorioFuncionario.SelecionarPorId(funcionario.Id);
 
             Assert.IsNotNull(funcionarioEncontrado);
-            Assert.AreEqual(funcionarioAtualizado.Id, funcionarioEncontrado.Id);
-            Assert.AreEqual(funcionarioAtualizado.Nome, funcionarioEncontrado.Nome);
-            Assert.AreEqual(funcionarioAtualizado.Usuario, funcionarioEncontrado.Usuario);
-            Assert.AreEqual(funcionarioAtualizado.Senha, funcionarioEncontrado.Senha);
+            Assert.AreEqual(funcionarioAtualizado, funcionarioEncontrado);
         }
 
         [TestMethod]
         public void Deve_Excluir_Funcionario()
         {
             // arrange
-            Funcionario novoFuncionario = new()
-            {
-                Nome = "Alan",
-                Usuario = "username.954",
-                Senha = "459@password!username"
-            };
-
-            repositorioFuncionario.Inserir(novoFuncionario);
+            repositorioFuncionario.Inserir(funcionario);
 
             // action
-            repositorioFuncionario.Excluir(novoFuncionario);
-
-            Funcionario funcionarioEncontrado = repositorioFuncionario.SelecionarPorId(novoFuncionario.Id);
+            repositorioFuncionario.Excluir(funcionario);
 
             // assert
+            Funcionario funcionarioEncontrado = repositorioFuncionario.SelecionarPorId(funcionario.Id);
+
             Assert.IsNull(funcionarioEncontrado);
         }
 
@@ -108,13 +91,6 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloFuncionario
         public void Deve_Selecionar_Todos_Os_Funcionarios()
         {
             // arrange
-            Funcionario funcionario = new()
-            {
-                Nome = "Alan",
-                Usuario = "username.954",
-                Senha = "459@password!username"
-            };
-
             Funcionario funcionario2 = new()
             {
                 Nome = "James",
@@ -122,39 +98,23 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloFuncionario
                 Senha = "358@username!password"
             };
 
-            Funcionario funcionario3 = new()
-            {
-                Nome = "Rafael",
-                Usuario = "username.357",
-                Senha = "869@password!username"
-            };
-
             repositorioFuncionario.Inserir(funcionario);
             repositorioFuncionario.Inserir(funcionario2);
-            repositorioFuncionario.Inserir(funcionario3);
 
             // action
-            List<Funcionario> funcionarios = repositorioFuncionario.SelecionarTodos();
+            List<Funcionario> funcionariosEncontrados = repositorioFuncionario.SelecionarTodos();
 
             // assert
-            Assert.AreEqual(3, funcionarios.Count);
+            Assert.AreEqual(2, funcionariosEncontrados.Count);
 
-            Assert.AreEqual("Alan", funcionarios[0].Nome);
-            Assert.AreEqual("James", funcionarios[1].Nome);
-            Assert.AreEqual("Rafael", funcionarios[2].Nome);
+            Assert.AreEqual("Alan", funcionariosEncontrados[0].Nome);
+            Assert.AreEqual("James", funcionariosEncontrados[1].Nome);
         }
 
         [TestMethod]
         public void Deve_Selecionar_Funcionario_Por_Id()
         {
             // arrange
-            Funcionario funcionario = new()
-            {
-                Nome = "Alan",
-                Usuario = "username.954",
-                Senha = "459@password!username"
-            };
-
             repositorioFuncionario.Inserir(funcionario);
 
             // action
