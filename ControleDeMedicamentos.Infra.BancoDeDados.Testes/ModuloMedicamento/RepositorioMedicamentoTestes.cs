@@ -32,7 +32,7 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloMedicamento
             }
 
             repositorioMedicamento = new();
-            repositorioFornecedor = new(repositorioMedicamento);
+            repositorioFornecedor = new();
         }
 
         [TestMethod]

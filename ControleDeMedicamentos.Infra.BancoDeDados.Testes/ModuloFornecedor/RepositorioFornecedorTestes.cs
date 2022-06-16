@@ -12,7 +12,7 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloFornecedor
     [TestClass]
     public class RepositorioFornecedorTestes : ConexaoSql
     {
-        private readonly RepositorioMedicamento repositorioMedicamento;
+        private readonly Fornecedor fornecedor;
         private readonly RepositorioFornecedor repositorioFornecedor;
         public RepositorioFornecedorTestes()
         {
@@ -32,15 +32,7 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloFornecedor
                 comando.ExecuteNonQuery();
             }
 
-            repositorioMedicamento = new();
-            repositorioFornecedor = new(repositorioMedicamento);
-        }
-
-        [TestMethod]
-        public void Deve_Inserir_Fornecedor()
-        {
-            // arrange
-            Fornecedor fornecedor = new()
+            fornecedor = new()
             {
                 Nome = "Alan",
                 Telefone = "49998165491",
@@ -49,6 +41,12 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloFornecedor
                 UF = "SC"
             };
 
+            repositorioFornecedor = new();
+        }
+
+        [TestMethod]
+        public void Deve_Inserir_Fornecedor()
+        {
             // action
             repositorioFornecedor.Inserir(fornecedor);
 
@@ -63,15 +61,6 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloFornecedor
         public void Deve_Editar_Fornecedor()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = "49998165491",
-                Email = "alan@email.com",
-                Cidade = "Lages",
-                UF = "SC"
-            };
-
             repositorioFornecedor.Inserir(fornecedor);
 
             Fornecedor fornecedorAtualizado = repositorioFornecedor.SelecionarPorId(fornecedor.Id);
@@ -96,72 +85,21 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloFornecedor
         public void Deve_Excluir_Fornecedor()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = "49998165491",
-                Email = "alan@email.com",
-                Cidade = "Lages",
-                UF = "SC"
-            };
-
             repositorioFornecedor.Inserir(fornecedor);
 
             // action
             repositorioFornecedor.Excluir(fornecedor);
 
+            // assert
             Fornecedor fornecedorEncontrado = repositorioFornecedor.SelecionarPorId(fornecedor.Id);
 
-            // assert
             Assert.IsNull(fornecedorEncontrado);
-        }
-
-        [TestMethod]
-        public void Nao_Deve_Excluir_Fornecedor_Se_Ligado_A_Medicamento()
-        {
-            // arrange
-            Medicamento medicamento = new()
-            {
-                Nome = "Paracetamol",
-                Descricao = "Remédio para dor de cabeça",
-                Lote = "P-001",
-                Validade = new DateTime(2022, 8, 20),
-                QuantidadeDisponivel = 50,
-                Fornecedor = new()
-                {
-                    Nome = "Alan",
-                    Telefone = "49998165491",
-                    Email = "alan@email.com",
-                    Cidade = "Lages",
-                    UF = "SC"
-                }
-            };
-
-            repositorioFornecedor.Inserir(medicamento.Fornecedor);
-            repositorioMedicamento.Inserir(medicamento);
-
-            Fornecedor fornecedorEncontrado = repositorioFornecedor.SelecionarPorId(medicamento.Fornecedor.Id);
-
-            // action
-            ValidationResult resultado = repositorioFornecedor.Excluir(fornecedorEncontrado);
-
-            // assert
-            Assert.AreEqual("Não é possível remover este fornecedor, pois ele está relacionado a um medicamento.", resultado.Errors[0].ErrorMessage);
         }
 
         [TestMethod]
         public void Deve_Selecionar_Todos_Os_Fornecedores()
         {
             // arrange
-            Fornecedor fornecedor1 = new()
-            {
-                Nome = "Alan",
-                Telefone = "49998165491",
-                Email = "alan@email.com",
-                Cidade = "Lages",
-                UF = "SC"
-            };
-
             Fornecedor fornecedor2 = new()
             {
                 Nome = "James",
@@ -171,43 +109,23 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloFornecedor
                 UF = "SP"
             };
 
-            Fornecedor fornecedor3 = new()
-            {
-                Nome = "Rafael",
-                Telefone = "51998451710",
-                Email = "rafael@email.com",
-                Cidade = "Gravataí",
-                UF = "RS"
-            };
-
-            repositorioFornecedor.Inserir(fornecedor1);
+            repositorioFornecedor.Inserir(fornecedor);
             repositorioFornecedor.Inserir(fornecedor2);
-            repositorioFornecedor.Inserir(fornecedor3);
 
             // action
-            List<Fornecedor> fornecedores = repositorioFornecedor.SelecionarTodos();
+            List<Fornecedor> fornecedoresEncontrados = repositorioFornecedor.SelecionarTodos();
 
             // assert
-            Assert.AreEqual(3, fornecedores.Count);
+            Assert.AreEqual(2, fornecedoresEncontrados.Count);
 
-            Assert.AreEqual("Alan", fornecedores[0].Nome);
-            Assert.AreEqual("James", fornecedores[1].Nome);
-            Assert.AreEqual("Rafael", fornecedores[2].Nome);
+            Assert.AreEqual("Alan", fornecedoresEncontrados[0].Nome);
+            Assert.AreEqual("James", fornecedoresEncontrados[1].Nome);
         }
 
         [TestMethod]
         public void Deve_Selecionar_Fornecedor_Por_Id()
         {
             // arrange
-            Fornecedor fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = "49998165491",
-                Email = "alan@email.com",
-                Cidade = "Lages",
-                UF = "SC"
-            };
-
             repositorioFornecedor.Inserir(fornecedor);
 
             // action

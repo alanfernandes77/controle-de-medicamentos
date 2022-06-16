@@ -1,6 +1,5 @@
 ﻿using ControleDeMedicamentos.Dominio.ModuloFornecedor;
 using ControleDeMedicamentos.Infra.BancoDeDados.Compartilhado;
-using ControleDeMedicamentos.Infra.BancoDeDados.ModuloMedicamento;
 using FluentValidation;
 using FluentValidation.Results;
 using System.Data.SqlClient;
@@ -9,12 +8,6 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloFornecedor
 {
     public class RepositorioFornecedor : ConexaoSql, IRepositorio<Fornecedor>
     {
-        private readonly RepositorioMedicamento _repositorioMedicamento;
-
-        public RepositorioFornecedor(RepositorioMedicamento repositorioMedicamento)
-        {
-            _repositorioMedicamento = repositorioMedicamento;
-        }
 
         public ValidationResult Inserir(Fornecedor fornecedor)
         {
@@ -116,10 +109,7 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloFornecedor
 
                 Conexao.Open();
 
-                ValidationResult resultadoValidacao = new();
-
-                if (_repositorioMedicamento.SelecionarTodos().Any(x => x.Fornecedor.Nome.Equals(fornecedor.Nome)))
-                    resultadoValidacao.Errors.Add(new ValidationFailure("", "Não é possível remover este fornecedor, pois ele está relacionado a um medicamento."));
+                ValidationResult resultadoValidacao = ObterValidador().Validate(fornecedor);
 
                 if (resultadoValidacao.IsValid)
                     comando.ExecuteNonQuery();
