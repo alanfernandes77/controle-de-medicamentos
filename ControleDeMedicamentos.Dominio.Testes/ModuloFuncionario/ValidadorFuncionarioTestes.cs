@@ -7,18 +7,26 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFuncionario
     [TestClass]
     public class ValidadorFuncionarioTestes
     {
-        [TestMethod]
-        public void Nome_Deve_Ser_Obrigatorio()
+        private readonly Funcionario funcionario;
+        private readonly ValidadorFuncionario validador;
+
+        public ValidadorFuncionarioTestes()
         {
-            // arrange
-            Funcionario funcionario = new()
+            funcionario = new()
             {
-                Nome = null,
+                Nome = "Alan",
                 Usuario = "username.954",
                 Senha = "459@password!username"
             };
 
-            ValidadorFuncionario validador = new();
+            validador = new();
+        }
+
+        [TestMethod]
+        public void Nome_Deve_Ser_Obrigatorio()
+        {
+            // arrange
+            funcionario.Nome = null;
 
             // action
             ValidationResult resultado = validador.Validate(funcionario);
@@ -31,14 +39,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFuncionario
         public void Nome_Deve_Ser_Valido()
         {
             // arrange
-            Funcionario funcionario = new()
-            {
-                Nome = "Afsdgll@#@GSDLgsfd",
-                Usuario = "username.954",
-                Senha = "459@password!username"
-            };
-
-            ValidadorFuncionario validador = new();
+            funcionario.Nome = "Afsdgll@#@GSDLgsfd";
 
             // action
             ValidationResult resultado = validador.Validate(funcionario);
@@ -51,14 +52,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFuncionario
         public void Usuario_Deve_Ser_Obrigatorio()
         {
             // arrange
-            Funcionario funcionario = new()
-            {
-                Nome = "Alan",
-                Usuario = null,
-                Senha = "459@password!username"
-            };
-
-            ValidadorFuncionario validador = new();
+            funcionario.Usuario = null;
 
             // action
             ValidationResult resultado = validador.Validate(funcionario);
@@ -71,14 +65,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFuncionario
         public void Usuario_Deve_Ser_Valido()
         {
             // arrange
-            Funcionario funcionario = new()
-            {
-                Nome = "Alan",
-                Usuario = "username@678811667!3344a7d41x97d1saj4",
-                Senha = "459@password!username"
-            };
-
-            ValidadorFuncionario validador = new();
+            funcionario.Usuario = "username@678811667!3344a7d41x97d1saj4";
 
             // action
             ValidationResult resultado = validador.Validate(funcionario);
@@ -91,14 +78,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFuncionario
         public void Senha_Deve_Ser_Obrigatorio()
         {
             // arrange
-            Funcionario funcionario = new()
-            {
-                Nome = "Alan",
-                Usuario = "username.954",
-                Senha = null
-            };
-
-            ValidadorFuncionario validador = new();
+            funcionario.Senha = null;
 
             // action
             ValidationResult resultado = validador.Validate(funcionario);
@@ -111,14 +91,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFuncionario
         public void Senha_Deve_Ser_Valida()
         {
             // arrange
-            Funcionario funcionario = new()
-            {
-                Nome = "Alan",
-                Usuario = "username.954",
-                Senha = "459@@#!  hfdjd  %#@!@#d!use"
-            };
-
-            ValidadorFuncionario validador = new();
+            funcionario.Senha = "459@@#!  hfdjd  %#@!@#d!use";
 
             // action
             ValidationResult resultado = validador.Validate(funcionario);
