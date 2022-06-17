@@ -1,4 +1,5 @@
-﻿using ControleDeMedicamentos.Dominio.ModuloMedicamento;
+﻿using ControleDeMedicamentos.Dominio.ModuloFornecedor;
+using ControleDeMedicamentos.Dominio.ModuloMedicamento;
 using ControleDeMedicamentos.Infra.BancoDeDados.Compartilhado;
 using FluentValidation;
 using FluentValidation.Results;
@@ -43,7 +44,6 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloMedicamento
 
                 using SqlCommand comando = new(query, Conexao);
 
-                comando.Parameters.AddWithValue("@ID", medicamento.Id);
                 comando.Parameters.AddWithValue("@NOME", medicamento.Nome);
                 comando.Parameters.AddWithValue("@DESCRICAO", medicamento.Descricao);
                 comando.Parameters.AddWithValue("@LOTE", medicamento.Lote);
@@ -162,6 +162,16 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloMedicamento
 
                 while (leitor.Read())
                 {
+                    Fornecedor fornecedor = new()
+                    {
+                        Id = Convert.ToInt32(leitor["FORNECEDOR_ID"]),
+                        Nome = Convert.ToString(leitor["FORNECEDOR_NOME"]),
+                        Telefone = Convert.ToString(leitor["FORNECEDOR_TELEFONE"]),
+                        Email = Convert.ToString(leitor["FORNECEDOR_EMAIL"]),
+                        Cidade = Convert.ToString(leitor["FORNECEDOR_CIDADE"]),
+                        UF = Convert.ToString(leitor["FORNECEDOR_UF"])
+                    };
+
                     Medicamento medicamento = new()
                     {
                         Id = Convert.ToInt32(leitor["ID"]),
@@ -170,15 +180,7 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloMedicamento
                         Lote = Convert.ToString(leitor["LOTE"]),
                         Validade = Convert.ToDateTime(leitor["VALIDADE"]),
                         QuantidadeDisponivel = Convert.ToInt32(leitor["QUANTIDADEDISPONIVEL"]),
-                        Fornecedor = new()
-                        {
-                            Id = Convert.ToInt32(leitor["FORNECEDOR_ID"]),
-                            Nome = Convert.ToString(leitor["FORNECEDOR_NOME"]),
-                            Telefone = Convert.ToString(leitor["FORNECEDOR_TELEFONE"]),
-                            Email = Convert.ToString(leitor["FORNECEDOR_EMAIL"]),
-                            Cidade = Convert.ToString(leitor["FORNECEDOR_CIDADE"]),
-                            UF = Convert.ToString(leitor["FORNECEDOR_UF"])
-                        }
+                        Fornecedor = fornecedor
                     };
 
                     medicamentos.Add(medicamento);
@@ -231,6 +233,17 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloMedicamento
                 Medicamento medicamento = null;
 
                 if (leitor.Read())
+                {
+                    Fornecedor fornecedor = new()
+                    {
+                        Id = Convert.ToInt32(leitor["FORNECEDOR_ID"]),
+                        Nome = Convert.ToString(leitor["FORNECEDOR_NOME"]),
+                        Telefone = Convert.ToString(leitor["FORNECEDOR_TELEFONE"]),
+                        Email = Convert.ToString(leitor["FORNECEDOR_EMAIL"]),
+                        Cidade = Convert.ToString(leitor["FORNECEDOR_CIDADE"]),
+                        UF = Convert.ToString(leitor["FORNECEDOR_UF"])
+                    };
+
                     medicamento = new()
                     {
                         Id = Convert.ToInt32(leitor["ID"]),
@@ -239,16 +252,9 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloMedicamento
                         Lote = Convert.ToString(leitor["LOTE"]),
                         Validade = Convert.ToDateTime(leitor["VALIDADE"]),
                         QuantidadeDisponivel = Convert.ToInt32(leitor["QUANTIDADEDISPONIVEL"]),
-                        Fornecedor = new()
-                        {
-                            Id = Convert.ToInt32(leitor["FORNECEDOR_ID"]),
-                            Nome = Convert.ToString(leitor["FORNECEDOR_NOME"]),
-                            Telefone = Convert.ToString(leitor["FORNECEDOR_TELEFONE"]),
-                            Email = Convert.ToString(leitor["FORNECEDOR_EMAIL"]),
-                            Cidade = Convert.ToString(leitor["FORNECEDOR_CIDADE"]),
-                            UF = Convert.ToString(leitor["FORNECEDOR_UF"])
-                        }
+                        Fornecedor = fornecedor
                     };
+                }
 
                 return medicamento;
             }
@@ -301,6 +307,16 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloMedicamento
 
                 while (leitor.Read())
                 {
+                    Fornecedor fornecedor = new()
+                    {
+                        Id = Convert.ToInt32(leitor["FORNECEDOR_ID"]),
+                        Nome = Convert.ToString(leitor["FORNECEDOR_NOME"]),
+                        Telefone = Convert.ToString(leitor["FORNECEDOR_TELEFONE"]),
+                        Email = Convert.ToString(leitor["FORNECEDOR_EMAIL"]),
+                        Cidade = Convert.ToString(leitor["FORNECEDOR_CIDADE"]),
+                        UF = Convert.ToString(leitor["FORNECEDOR_UF"])
+                    };
+
                     Medicamento medicamento = new()
                     {
                         Id = Convert.ToInt32(leitor["ID"]),
@@ -309,15 +325,7 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloMedicamento
                         Lote = Convert.ToString(leitor["LOTE"]),
                         Validade = Convert.ToDateTime(leitor["VALIDADE"]),
                         QuantidadeDisponivel = Convert.ToInt32(leitor["QUANTIDADEDISPONIVEL"]),
-                        Fornecedor = new()
-                        {
-                            Id = Convert.ToInt32(leitor["FORNECEDOR_ID"]),
-                            Nome = Convert.ToString(leitor["FORNECEDOR_NOME"]),
-                            Telefone = Convert.ToString(leitor["FORNECEDOR_TELEFONE"]),
-                            Email = Convert.ToString(leitor["FORNECEDOR_EMAIL"]),
-                            Cidade = Convert.ToString(leitor["FORNECEDOR_CIDADE"]),
-                            UF = Convert.ToString(leitor["FORNECEDOR_UF"])
-                        }
+                        Fornecedor = fornecedor
                     };
 
                     medicamentos.Add(medicamento);
