@@ -37,7 +37,6 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloFuncionario
 
                 using SqlCommand comando = new(query, Conexao);
 
-                comando.Parameters.AddWithValue("@ID", funcionario.Id);
                 comando.Parameters.AddWithValue("@NOME", funcionario.Nome);
                 comando.Parameters.AddWithValue("@USUARIO", funcionario.Usuario);
                 comando.Parameters.AddWithValue("@SENHA", funcionario.Senha);

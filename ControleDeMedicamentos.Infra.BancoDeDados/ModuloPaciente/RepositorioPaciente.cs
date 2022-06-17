@@ -35,7 +35,6 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloPaciente
 
                 using SqlCommand comando = new(query, Conexao);
 
-                comando.Parameters.AddWithValue("@ID", paciente.Id);
                 comando.Parameters.AddWithValue("@NOME", paciente.Nome);
                 comando.Parameters.AddWithValue("@CARTAOSUS", paciente.CartaoSUS);
 

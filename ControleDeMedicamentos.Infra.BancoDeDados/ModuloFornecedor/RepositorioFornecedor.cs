@@ -42,7 +42,6 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.ModuloFornecedor
 
                 using SqlCommand comando = new(query, Conexao);
 
-                comando.Parameters.AddWithValue("@ID", fornecedor.Id);
                 comando.Parameters.AddWithValue("@NOME", fornecedor.Nome);
                 comando.Parameters.AddWithValue("@TELEFONE", fornecedor.Telefone);
                 comando.Parameters.AddWithValue("@EMAIL", fornecedor.Email);
