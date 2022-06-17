@@ -17,7 +17,19 @@ namespace ControleDeMedicamentos.Infra.BancoDeDados.Testes.ModuloPaciente
             using (Conexao = new(StringConexao))
             {
                 string query =
-                    @"DELETE FROM TBPaciente;
+                    @"DELETE FROM TBRequisicao;
+                    DBCC CHECKIDENT (TBRequisicao, RESEED, 0)
+
+                    DELETE FROM TBMedicamento;
+                    DBCC CHECKIDENT (TBMedicamento, RESEED, 0)
+
+                    DELETE FROM TBFornecedor;
+                    DBCC CHECKIDENT (TBFornecedor, RESEED, 0)
+
+                    DELETE FROM TBFuncionario;
+                    DBCC CHECKIDENT (TBFuncionario, RESEED, 0)
+
+                    DELETE FROM TBPaciente;
                     DBCC CHECKIDENT (TBPaciente, RESEED, 0)";
 
                 SqlCommand comando = new(query, Conexao);
