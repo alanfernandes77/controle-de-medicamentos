@@ -135,7 +135,7 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloRequisicao
         public void Data_Requisicao_Deve_Ser_Valida()
         {
             // arrange 
-            requisicao.DataRequisicao = new(2022, 6, 17);
+            requisicao.DataRequisicao = new(2025, 10, 8);
 
             // action
             ValidationResult resultado = validador.Validate(requisicao);
