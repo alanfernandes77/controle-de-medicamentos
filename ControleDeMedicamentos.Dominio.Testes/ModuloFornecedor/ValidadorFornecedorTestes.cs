@@ -1,5 +1,5 @@
 ﻿using ControleDeMedicamentos.Dominio.ModuloFornecedor;
-using FluentValidation.Results;
+using FluentValidation.TestHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
@@ -7,20 +7,11 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
     [TestClass]
     public class ValidadorFornecedorTestes
     {
-        private readonly Fornecedor fornecedor;
+        private Fornecedor? fornecedor;
         private readonly ValidadorFornecedor validador;
 
         public ValidadorFornecedorTestes()
         {
-            fornecedor = new()
-            {
-                Nome = "Alan",
-                Telefone = "49998165491",
-                Email = "alan@email.com",
-                Cidade = "Lages",
-                UF = "SC"
-            };
-
             validador = new();
         }
 
@@ -28,130 +19,152 @@ namespace ControleDeMedicamentos.Dominio.Testes.ModuloFornecedor
         public void Nome_Deve_Ser_Obrigatorio()
         {
             // arrange
+            fornecedor = NovoFornecedor();
             fornecedor.Nome = null;
 
             // action
-            ValidationResult resultado = validador.Validate(fornecedor);
+            TestValidationResult<Fornecedor> resultado = validador.TestValidate(fornecedor);
 
             // assert
-            Assert.AreEqual("Campo 'Nome' é obrigatório.", resultado.Errors[0].ErrorMessage);
+            resultado.ShouldHaveValidationErrorFor(fornecedor => fornecedor.Nome);
         }
 
         [TestMethod]
         public void Nome_Deve_Ser_Valido()
         {
             // arrange
+            fornecedor = NovoFornecedor();
             fornecedor.Nome = "Alan_Fernandes!?";
 
             // action
-            ValidationResult resultado = validador.Validate(fornecedor);
+            TestValidationResult<Fornecedor> resultado = validador.TestValidate(fornecedor);
 
             // assert
-            Assert.AreEqual("Nome informado é inválido.", resultado.Errors[0].ErrorMessage);
+            resultado.ShouldHaveValidationErrorFor(fornecedor => fornecedor.Nome);
         }
 
         [TestMethod]
         public void Telefone_Deve_Ser_Obrigatorio()
         {
             // arrange
+            fornecedor = NovoFornecedor();
             fornecedor.Telefone = null;
 
             // action
-            ValidationResult resultado = validador.Validate(fornecedor);
+            TestValidationResult<Fornecedor> resultado = validador.TestValidate(fornecedor);
 
             // assert
-            Assert.AreEqual("Campo 'Telefone' é obrigatório.", resultado.Errors[0].ErrorMessage);
+            resultado.ShouldHaveValidationErrorFor(fornecedor => fornecedor.Telefone);
         }
 
         [TestMethod]
         public void Telefone_Deve_Ser_Valido()
         {
             // arrange
+            fornecedor = NovoFornecedor();
             fornecedor.Telefone = "qwertyuiopa";
 
             // action
-            ValidationResult resultado = validador.Validate(fornecedor);
+            TestValidationResult<Fornecedor> resultado = validador.TestValidate(fornecedor);
 
             // assert
-            Assert.AreEqual("Telefone informado é inválido.", resultado.Errors[0].ErrorMessage);
+            resultado.ShouldHaveValidationErrorFor(fornecedor => fornecedor.Telefone);
         }
 
         [TestMethod]
         public void Email_Deve_Ser_Obrigatorio()
         {
             // arrange
+            fornecedor = NovoFornecedor();
             fornecedor.Email = null;
 
             // action
-            ValidationResult resultado = validador.Validate(fornecedor);
+            TestValidationResult<Fornecedor> resultado = validador.TestValidate(fornecedor);
 
             // assert
-            Assert.AreEqual("Campo 'E-mail' é obrigatório.", resultado.Errors[0].ErrorMessage);
+            resultado.ShouldHaveValidationErrorFor(fornecedor => fornecedor.Email);
         }
 
         [TestMethod]
         public void Email_Deve_Ser_Valido()
         {
             // arrange
+            fornecedor = NovoFornecedor();
             fornecedor.Email = "alanemail.com";
 
             // action
-            ValidationResult resultado = validador.Validate(fornecedor);
+            TestValidationResult<Fornecedor> resultado = validador.TestValidate(fornecedor);
 
             // assert
-            Assert.AreEqual("E-mail informado é inválido.", resultado.Errors[0].ErrorMessage);
+            resultado.ShouldHaveValidationErrorFor(fornecedor => fornecedor.Email);
         }
 
         [TestMethod]
         public void Cidade_Deve_Ser_Obrigatorio()
         {
             // arrange
+            fornecedor = NovoFornecedor();
             fornecedor.Cidade = null;
 
             // action
-            ValidationResult resultado = validador.Validate(fornecedor);
+            TestValidationResult<Fornecedor> resultado = validador.TestValidate(fornecedor);
 
             // assert
-            Assert.AreEqual("Campo 'Cidade' é obrigatório.", resultado.Errors[0].ErrorMessage);
+            resultado.ShouldHaveValidationErrorFor(fornecedor => fornecedor.Cidade);
         }
 
         [TestMethod]
         public void Cidade_Deve_Ser_Valida()
         {
             // arrange
+            fornecedor = NovoFornecedor();
             fornecedor.Cidade = "_Lag?es";
 
             // action
-            ValidationResult resultado = validador.Validate(fornecedor);
+            TestValidationResult<Fornecedor> resultado = validador.TestValidate(fornecedor);
 
             // assert
-            Assert.AreEqual("Cidade informada é inválida.", resultado.Errors[0].ErrorMessage);
+            resultado.ShouldHaveValidationErrorFor(fornecedor => fornecedor.Cidade);
         }
 
         [TestMethod]
         public void UF_Deve_Ser_Obrigatorio()
         {
             // arrange
+            fornecedor = NovoFornecedor();
             fornecedor.UF = null;
 
             // action
-            ValidationResult resultado = validador.Validate(fornecedor);
+            TestValidationResult<Fornecedor> resultado = validador.TestValidate(fornecedor);
 
             // assert
-            Assert.AreEqual("Campo 'UF' é obrigatório.", resultado.Errors[0].ErrorMessage);
+            resultado.ShouldHaveValidationErrorFor(fornecedor => fornecedor.UF);
         }
 
         [TestMethod]
         public void UF_Deve_Ser_Valida()
         {
             // arrange
+            fornecedor = NovoFornecedor();
             fornecedor.UF = "XX";
 
             // action
-            ValidationResult resultado = validador.Validate(fornecedor);
+            TestValidationResult<Fornecedor> resultado = validador.TestValidate(fornecedor);
 
             // assert
-            Assert.AreEqual("UF informada é inválida.", resultado.Errors[0].ErrorMessage);
+            resultado.ShouldHaveValidationErrorFor(fornecedor => fornecedor.UF);
+        }
+
+        private Fornecedor NovoFornecedor()
+        {
+            return new()
+            {
+                Nome = "Alan",
+                Telefone = "49998165491",
+                Email = "alan@email.com",
+                Cidade = "Lages",
+                UF = "SC"
+            };
         }
     }
 }
